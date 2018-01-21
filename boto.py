@@ -23,7 +23,6 @@ def joke():
 
 
 def previous_visit_status():
-    print disable_previous_visitor
     if request.get_cookie("user_name"):
         return True
     else:
@@ -58,12 +57,11 @@ def chat():
 
     if previous_visitor and not disable_previous_visitor:
         disable_previous_visitor = True
-        print "entered if previous statement"
         return json.dumps({
             "animation": "excited",
             "msg": "Nice seeing you again, {}!".format(name)
         })
-    elif not previous_visitor and not disable_previous_visitor:
+    elif not previous_visitor and not disable_previous_visitor and len(name.split()) == 1:
         disable_previous_visitor = True
         response.set_cookie(
             name="user_name",
@@ -72,6 +70,11 @@ def chat():
         return json.dumps({
             "animation": "excited",
             "msg": "Nice meeting you, {}!".format(name)
+        })
+    elif not previous_visitor and not disable_previous_visitor and len(name.split()) > 1:
+        return json.dumps({
+            "animation": "excited",
+            "msg": "Please enter up to 1 word for your name!"
         })
 
     if ("commands" in user_message):
